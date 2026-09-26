@@ -1,2 +1,2 @@
-# pyappserv
-Azure App Service automated in Python
+
+# Azure App Service automated in Python
