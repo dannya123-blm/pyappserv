@@ -13,12 +13,16 @@ app_name = "appservicename441"
 
 plan_parameters = {
     "location": location,
-    "kind": "app",
+    "kind": "linux",
     "sku": {
-        "name": "F1",
-        "tier": "Free",
-        "capacity": 1  
+        "name": "B1",
+        "tier": "Basic",
+        "capacity": 1
     },
+    "properties": {
+        "reserved": True
+    }
+       
 }
 
 
@@ -32,11 +36,12 @@ plan_result = poller.result()
 
 app_parameters = {
     "location": location,
-    "kind": "app",
+    "kind": "app,linux",
     "properties": {
-        "server_farm_id": plan_result.id,
+        "serverFarmId": plan_result.id,
         "site_config": {
-            "always_on": False, 
+            "always_on": True, 
+            "linuxFxVersion": "PYTHON|3.10"
         }
     }
     
