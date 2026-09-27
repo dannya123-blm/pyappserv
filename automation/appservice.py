@@ -1,0 +1,7 @@
+from azure.identity import DefaultAzureCredential
+
+
+credential = DefaultAzureCredential()
+
+subscription = ("1e894640-118b-4225-86cf-2a809b92c7de")
+

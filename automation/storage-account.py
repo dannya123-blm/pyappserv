@@ -23,11 +23,12 @@ parameters = {
     
  }
 
-poller = resource_client.resource_groups.begin_delete(
-    resource_group_name
+resource_client.resource_groups.create_or_update(
+    resource_group_name,
+    {"location": location}
 )
 
-poller.result()
+
 
 poller = storage_client.storage_accounts.begin_create(
     resource_group_name,
@@ -44,6 +45,6 @@ print("Credential object created:", credential)
 print("Listing resource groups i already have: ")
 print(f"Resource group '{resource_group_name}' created (or already existed)")
 print(f"Storage Account '{storage_name}' created (or already existed)")
-print(f"Resource group '{resource_group_name}' deleted.")
+# print(f"Resource group '{resource_group_name}' deleted.")
 for rg in resource_client.resource_groups.list():
     print(" -", rg.name)
