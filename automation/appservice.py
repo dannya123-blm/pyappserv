@@ -2,9 +2,12 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.web import WebSiteManagementClient
 
 
+
+
 credential = DefaultAzureCredential()
 subscription_id = "1e894640-118b-4225-86cf-2a809b92c7de"
 web_client = WebSiteManagementClient(credential, subscription_id)
+network_client = NetworkManagementClient(credential, subscription_id)
 
 resource_group_name = "rg-pystorage-lab"
 location = "francecentral"
@@ -37,6 +40,7 @@ plan_result = poller.result()
 app_parameters = {
     "location": location,
     "kind": "app,linux",
+    "identity": "SystemAssigned",
     "properties": {
         "serverFarmId": plan_result.id,
         "site_config": {
