@@ -4,6 +4,7 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource.resources import ResourceManagementClient
 from azure.mgmt.storage import StorageManagementClient
 
+
 load_dotenv()
 
 
@@ -23,6 +24,7 @@ parameters = {
    "sku": {"name": "Standard_GRS"},
    "properties": {
         "access_tier": "Hot",
+        "minimumTlsVersion": 'TLS1_2',
         "allow_blob_public_access": False,
         "network_rule_set": {
             "default_action": "Deny"
