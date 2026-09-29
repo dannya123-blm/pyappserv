@@ -52,11 +52,17 @@ poller = sql_client.databases.begin_create_or_update(
 
 db_result = poller.result()
 
+subnet2_id = network_client.subnets.get(
+    resource_group_name,
+    vnet_name,
+    subnet2_name
+).id
+
 privendpoint_parameters = {
       "location": location,
       "properties": {
           "subnet": {
-              "id": subnet2_result.id
+              "id": subnet2_id
           },
           "privateLinkServiceConnections": [
               {
