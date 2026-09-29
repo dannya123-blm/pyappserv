@@ -1,10 +1,15 @@
+import os
+from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource.resources import ResourceManagementClient
 from azure.mgmt.storage import StorageManagementClient
 
-subscription_id = ("1e894640-118b-4225-86cf-2a809b92c7de")
+load_dotenv()
+
+
 
 credential = DefaultAzureCredential()
+subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
 resource_client = ResourceManagementClient(credential, subscription_id)
 storage_client = StorageManagementClient(credential, subscription_id)
 

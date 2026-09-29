@@ -1,9 +1,13 @@
+import os
+from dotenv import load_dotenv
 # vnet, 2 isolated subnets, private endpoint that links to subnet
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.network import NetworkManagementClient
 
+load_dotenv()
+
 credential = DefaultAzureCredential()
-subscription_id = "1e894640-118b-4225-86cf-2a809b92c7de"
+subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
 
 network_client = NetworkManagementClient(credential, subscription_id)
 
