@@ -17,6 +17,7 @@ server_name = "sqlserv441"
 sql_db_name = "sqldb441"
 priv_endpoint_name = "privendpoint442"
 subnet2_name = "subnet442"
+vnet_name = "vnet441"
 
 sql_server_parameters = {
     "location": location,
@@ -68,7 +69,7 @@ privendpoint_parameters = {
               {
                   "name": "privateLinkServiceConnections",
                   "properties": {
-                      "privateLinkServiceId": "/subscriptions/1e894640-118b-4225-86cf-2a809b92c7de/resourceGroups/rg-pystorage-lab/providers/Microsoft.Sql/servers/sqlserv441",
+                      "privateLinkServiceId": print(f"/subscriptions/{os.getenv("AZURE_SUBSCRIPTION_ID")}/resourceGroups/rg-pystorage-lab/providers/Microsoft.Sql/servers/sqlserv441"),
                       "groupIds": ["sqlserver"]
                   }
               } 
