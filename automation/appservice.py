@@ -47,11 +47,13 @@ plan_result = poller.result()
 app_parameters = {
     "location": location,
     "kind": "app,linux",
-    "identity": "SystemAssigned",
+    "identity": {
+        "type": "SystemAssigned"
+    },
     "properties": {
         "serverFarmId": plan_result.id,
         "virtualNetworkSubnetId": subnet1_id,
-        "site_config": {
+        "siteConfig": {
             "always_on": True, 
             "linuxFxVersion": "PYTHON|3.10"
         }

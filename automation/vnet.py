@@ -18,8 +18,8 @@ priv_endpoint_name = "privendpoint441"
 vnet_parameters = {
     "location": location,
     "properties": {
-        "address_space": {
-            "address_prefixes": [
+        "addressSpace": {
+            "addressPrefixes": [
                 '10.0.0.0/16'
             ]
         }
@@ -29,11 +29,11 @@ vnet_parameters = {
 
 subnet1_parameters = {
     "properties": {
-        "address_prefix": '10.0.1.0/24',
+        "addressPrefix": '10.0.1.0/24',
         "delegations": [{
             "name": "delegation1",
             "properties": {
-                "service_name": "Microsoft.Web/serverFarms"
+                "serviceName": "Microsoft.Web/serverFarms"
             }
         }
             
@@ -43,8 +43,8 @@ subnet1_parameters = {
 
 subnet2_parameters = {
     "properties": {
-        "address_prefix": '10.0.2.0/24',
-        "private_endpoint_network_policies": "Disabled"
+        "addressPrefix": '10.0.2.0/24',
+        "privateEndpointNetworkPolicies": "Disabled"
     }
 
 }
@@ -74,35 +74,29 @@ poller = network_client.subnets.begin_create_or_update(
 
 subnet2_result = poller.result()
 
-privendpoint_parameters ={
-    "location": location,
-    # telling azure to put the priv endpoint to the this subnet
-    "properties": {
-         "subnet":{
-             "id": subnet2_result.id
-         },
-         # bridge = conencts subnet to my storage account
-         "privateLinkServiceConnections": [
-             {
-                 "name": "privateLinkServiceConnections",
-                 "properties":{
-                     "privateLinkServiceId": "/subscriptions/1e894640-118b-4225-86cf-2a809b92c7de/resourceGroups/rg-pystorage-lab/providers/Microsoft.Storage/storageAccounts/pystorageacc441",
-                     # azure connects only to blob
-                     "groupIds": ["blob"]
-                     
-                 }
-                 
-             }
-         ]
-    },
-    
-}
+privendpoint_parameters = {
+      "location": location,
+      "properties": {
+          "subnet": {
+              "id": subnet2_result.id
+          },
+          "privateLinkServiceConnections": [
+              {
+                  "name": "privateLinkServiceConnections",
+                  "properties": {
+                      "privateLinkServiceId": "/subscriptions/1e894640-118b-4225-86cf-2a809b92c7de/resourceGroups/rg-pystorage-lab/providers/Microsoft.Storage/storageAccounts/pystorageacc441",
+                      "groupIds": ["blob"]
+                  }
+              }
+          ]
+      }
+  }
 
 poller = network_client.private_endpoints.begin_create_or_update(
-    resource_group_name,
-    priv_endpoint_name,
-    privendpoint_parameters
-)
+      resource_group_name,
+      priv_endpoint_name,
+      privendpoint_parameters
+  )
 
 priv_endpoint_result = poller.result()
 
