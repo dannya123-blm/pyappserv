@@ -69,7 +69,7 @@ privendpoint_parameters = {
               {
                   "name": "privateLinkServiceConnections",
                   "properties": {
-                      "privateLinkServiceId": print(f"/subscriptions/{os.getenv("AZURE_SUBSCRIPTION_ID")}/resourceGroups/rg-pystorage-lab/providers/Microsoft.Sql/servers/sqlserv441"),
+                      "privateLinkServiceId": f"/subscriptions/{subscription_id}/resourceGroups/rg-pystorage-lab/providers/Microsoft.Sql/servers/sqlserv441",
                       "groupIds": ["sqlserver"]
                   }
               } 
