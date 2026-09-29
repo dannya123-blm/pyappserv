@@ -19,9 +19,11 @@ parameters = {
    "properties": {
         "access_tier": "Hot",
         "allow_blob_public_access": False,
+        "network_rule_set": {
+            "default_action": "Deny"
+        }
    }
-    
- }
+}   
 
 resource_client.resource_groups.create_or_update(
     resource_group_name,
