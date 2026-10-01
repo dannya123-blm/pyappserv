@@ -109,7 +109,6 @@ def sql_connection():
     token = credential.get_token("https://database.windows.net/.default")
 
     token_bytes = token.token.encode("utf-16-le")
-    token_struct = struct.pack(f"<I{len(token_bytes)}s>", len(token_bytes), token_bytes)
 
     connection_string = (
         f"DRIVER={SQL_DRIVER};"
