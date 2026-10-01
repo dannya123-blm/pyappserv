@@ -12,7 +12,6 @@ from flask import Flask, request, redirect, url_for, session, flash, render_temp
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, ContentSettings
-from azure.keyvault.secrets import SecretClient
 import pyodbc
 
 try:
@@ -31,7 +30,6 @@ except ImportError:
 #   - Azure App Service / App Service Plan: hosts Flask
 #   - Azure SQL: users, food, orders, ratings, forum, events
 #   - Azure Blob Storage: food photos + event archive
-#   - Key Vault: optional secrets through Managed Identity
 #   - VNet / Private Endpoints: network path to private Azure services
 #   - Event Grid: optional event publishing
 #
@@ -43,6 +41,8 @@ except ImportError:
 # This prototype does NOT process real card payments. The order
 # flow records an order/reservation. A real payment provider such
 # as Stripe should be added before accepting real money.
+#
+# Secrets/Key Vault integration has not been implemented yet.
 # ============================================================
 
 app = Flask(__name__)
@@ -67,14 +67,11 @@ SQL_SERVER = os.getenv("AZURE_SQL_SERVER", "sqlserv441.database.windows.net")
 SQL_DATABASE = os.getenv("AZURE_SQL_DATABASE", "sqldb441")
 SQL_DRIVER = os.getenv("AZURE_SQL_DRIVER", "{ODBC Driver 18 for SQL Server}")
 
-KEY_VAULT_URL = os.getenv("AZURE_KEY_VAULT_URL")
-
 EVENT_GRID_ENDPOINT = os.getenv("EVENT_GRID_ENDPOINT")
 EVENT_GRID_KEY = os.getenv("EVENT_GRID_KEY")
 
 credential = DefaultAzureCredential(exclude_interactive_browser_credential=True)
 blob_container = None
-secret_client = None
 
 
 # ============================================================
@@ -105,25 +102,6 @@ def get_blob_container():
         raise
 
     return blob_container
-
-
-def get_secret(name, default=None):
-    """Key Vault through Managed Identity when AZURE_KEY_VAULT_URL is configured."""
-    global secret_client
-
-    if not KEY_VAULT_URL:
-        return os.getenv(name, default)
-
-    try:
-        if not secret_client:
-            secret_client = SecretClient(
-                vault_url=KEY_VAULT_URL,
-                credential=credential,
-            )
-        return secret_client.get_secret(name).value
-    except Exception:
-        log.exception("Key Vault lookup failed for %s", name)
-        return os.getenv(name, default)
 
 
 def sql_connection():
@@ -1130,7 +1108,6 @@ def health():
         "azure_app_service":bool(os.getenv("WEBSITE_SITE_NAME")),
         "storage_account":STORAGE_ACCOUNT,
         "sql_database":SQL_DATABASE,
-        "key_vault_configured":bool(KEY_VAULT_URL),
         "event_grid_configured":bool(EVENT_GRID_ENDPOINT),
     }
 
